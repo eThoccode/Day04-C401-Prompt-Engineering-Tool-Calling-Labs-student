@@ -25,14 +25,15 @@ Baseline đo thật trên `eval_base` (provider `openrouter`, model `gpt-4o-mini
 
 ## Scope
 
-Core bắt buộc:
+Nhiệm vụ bắt buộc:
 
 - Setup chạy được bằng provider thật.
 - Agent có ít nhất 5 tool trong `artifacts/tools.yaml`.
 - Chạy base eval.
 - Tối ưu ít nhất 3 vòng sau baseline: `v1`, `v2`, `v3`.
 - Ghi `artifacts/version_log.csv`.
-- Tự viết thêm ít nhất 5 eval case vào `data/eval_group.json`.
+- Viết thêm ít nhất 1 tool mới (kèm `TOOL.md`, đăng ký trong `tools/__init__.py` và `tools.yaml`).
+- Tự viết thêm 10 eval case vào `data/eval_group.json`, trong đó 5 single turn và 5 multi turn.
 - Nộp run JSON, transcript JSON, report.
 
 Bonus:
