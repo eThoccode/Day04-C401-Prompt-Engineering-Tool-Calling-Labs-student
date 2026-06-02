@@ -3,5 +3,201 @@
   "dataset_role": "group",
   "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_summarize_bullets",
+      "phase": "B", "suite": "group",
+      "query": "Tóm tắt đoạn văn này dưới dạng gạch đầu dòng giúp mình: OpenAI vừa phát hành GPT-5 với nhiều nâng cấp lớn. Model này thông minh hơn nhiều và hỗ trợ xử lý đa phương thức cực kỳ mạnh mẽ.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "summarizer",
+            "args": {
+              "text": "OpenAI vừa phát hành GPT-5 với nhiều nâng cấp lớn. Model này thông minh hơn nhiều và hỗ trợ xử lý đa phương thức cực kỳ mạnh mẽ.",
+              "style": "bullets"
+            }
+          }
+        ]
+      },
+      "metadata": {"skill": "summarizer_bullets", "difficulty": "easy", "what_it_tests": "Yêu cầu tóm tắt đoạn văn bản -> gọi tool custom 'summarizer' dạng bullets."}
+    },
+    {
+      "id": "G02_export_report",
+      "phase": "B", "suite": "group",
+      "query": "Lưu nội dung báo cáo này ra file 'result.md' giúp mình nhé: # Báo cáo AI hôm nay\n\nNội dung nghiên cứu rất hay.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "exporter",
+            "args": {
+              "content": "# Báo cáo AI hôm nay\n\nNội dung nghiên cứu rất hay.",
+              "filename": "result.md"
+            }
+          }
+        ]
+      },
+      "metadata": {"skill": "export_report_file", "difficulty": "easy", "what_it_tests": "Yêu cầu lưu báo cáo -> gọi tool custom 'exporter' với nội dung và tên file chỉ định."}
+    },
+    {
+      "id": "G03_arxiv_search_sort",
+      "phase": "B", "suite": "group",
+      "query": "Tìm các bài báo mới nhất về Prompt Engineering trên arXiv",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "papers",
+            "args": {
+              "query": "Prompt Engineering",
+              "sort_by": "submittedDate"
+            }
+          }
+        ]
+      },
+      "metadata": {"skill": "arxiv_search_newest", "difficulty": "medium", "what_it_tests": "Yêu cầu bài báo 'mới nhất' -> map sort_by thành submittedDate khi tìm papers."}
+    },
+    {
+      "id": "G04_missing_url_fetch",
+      "phase": "B", "suite": "group",
+      "query": "Hãy phân tích bài viết này xem thế nào",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {"skill": "clarify_missing_url", "difficulty": "easy", "what_it_tests": "Nói 'bài này' nhưng không đưa link -> ask_user xin URL."}
+    },
+    {
+      "id": "G05_out_of_scope_cooking",
+      "phase": "B", "suite": "group",
+      "query": "Hướng dẫn mình cách nấu món phở bò Hà Nội chuẩn vị truyền thống.",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {"skill": "out_of_scope_cooking", "difficulty": "easy", "what_it_tests": "Yêu cầu nấu ăn ngoài phạm vi trợ lý nghiên cứu -> KHÔNG gọi tool và từ chối."}
+    },
+    {
+      "id": "G06_multiturn_export_carry",
+      "phase": "B", "suite": "group",
+      "is_multiturn": true,
+      "turns": [
+        {"role": "user", "content": "Tóm tắt đoạn văn bản sau: OpenAI vừa ra mắt model mới."},
+        {"role": "user", "content": "Dưới dạng gạch đầu dòng nhé."},
+        {"role": "user", "content": "Bây giờ hãy lưu kết quả tóm tắt đó ra file 'summarized_report.md' giúp mình."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "exporter",
+            "args": {
+              "filename": "summarized_report.md"
+            }
+          }
+        ]
+      },
+      "metadata": {"skill": "multiturn_export_carry", "difficulty": "hard", "what_it_tests": "Multi-turn: Lượt cuối đổi hành động từ tóm tắt sang lưu báo cáo -> gọi tool 'exporter' với filename chỉ định."}
+    },
+    {
+      "id": "G07_multiturn_timeline_limit",
+      "phase": "B", "suite": "group",
+      "is_multiturn": true,
+      "turns": [
+        {"role": "user", "content": "Lấy 5 tweet mới nhất của Sam Altman"},
+        {"role": "user", "content": "À nhầm, lấy của Elon Musk nhé"},
+        {"role": "user", "content": "Giữ nguyên số lượng tweet nhé"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 5
+            }
+          }
+        ]
+      },
+      "metadata": {"skill": "multiturn_timeline_limit", "difficulty": "hard", "what_it_tests": "Multi-turn: map tên Elon Musk thành elonmusk, carry limit=5 từ lượt 1, sửa Sam Altman thành Elon Musk."}
+    },
+    {
+      "id": "G08_multiturn_arxiv_limit",
+      "phase": "B", "suite": "group",
+      "is_multiturn": true,
+      "turns": [
+        {"role": "user", "content": "Tìm 10 bài báo về LLM Agents trên arXiv"},
+        {"role": "user", "content": "Sắp xếp theo ngày đăng mới nhất nhé"},
+        {"role": "user", "content": "Giảm số lượng bài báo xuống còn 5 bài thôi"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "papers",
+            "args": {
+              "query": "LLM Agents",
+              "sort_by": "submittedDate",
+              "max_results": 5
+            }
+          }
+        ]
+      },
+      "metadata": {"skill": "multiturn_arxiv_limit", "difficulty": "hard", "what_it_tests": "Multi-turn: tìm papers chủ đề LLM Agents, carry sort_by từ lượt 2, sửa max_results 10->5 ở lượt 3."}
+    },
+    {
+      "id": "G09_multiturn_clarify_url",
+      "phase": "B", "suite": "group",
+      "is_multiturn": true,
+      "turns": [
+        {"role": "user", "content": "Đọc và tóm tắt bài này hộ mình"},
+        {"role": "user", "content": "Dùng link này nhé: https://openai.com/blog/gpt-5"},
+        {"role": "user", "content": "Chỉ đọc bài đó thôi nhé"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/blog/gpt-5"
+            }
+          }
+        ]
+      },
+      "metadata": {"skill": "multiturn_clarify_url", "difficulty": "medium", "what_it_tests": "Multi-turn: hỏi xin url ở lượt 1, cung cấp ở lượt 2, lượt 3 xác nhận -> gọi tool 'fetch' đúng url."}
+    },
+    {
+      "id": "G10_multiturn_switch_lookup_social",
+      "phase": "B", "suite": "group",
+      "is_multiturn": true,
+      "turns": [
+        {"role": "user", "content": "Tìm trên mạng tin công nghệ về GPT-5 hôm nay"},
+        {"role": "user", "content": "Không tìm web nữa, chuyển sang xem mọi người thảo luận gì trên Twitter đi"},
+        {"role": "user", "content": "Vẫn giữ chủ đề GPT-5 nhé"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "GPT-5"
+            }
+          }
+        ]
+      },
+      "metadata": {"skill": "multiturn_switch_lookup_social", "difficulty": "hard", "what_it_tests": "Multi-turn: chuyển đổi công cụ từ web_search sang social_search, mang theo từ khóa GPT-5."}
+    }
+  ]
 }

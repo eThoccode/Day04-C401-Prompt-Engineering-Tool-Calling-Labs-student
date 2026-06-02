@@ -1,0 +1,136 @@
+{
+  "transcript_id": "v1_gemini_20260602T141737853862",
+  "version": "v1",
+  "artifact_version": "v1+p0dfb3df4d21a+t6a403c231428",
+  "prompt_hash": "0dfb3df4d21affac9d9ae8e8ad97af79060e5b35e772798df1d02d8694b0eb20",
+  "tools_hash": "6a403c2314289706f6b7e1d71278a322360ec393d56212125d22fdd630dbc75c",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash",
+  "system_prompt": "C:\\Users\\MiDi\\VinAi\\Lab\\Day04-lab-assignment\\Day04-C401-Prompt-Engineering-Tool-Calling-Labs-student\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\MiDi\\VinAi\\Lab\\Day04-lab-assignment\\Day04-C401-Prompt-Engineering-Tool-Calling-Labs-student\\starter_v0\\artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-06-02T14:17:37",
+  "updated_at": "2026-06-02T14:22:06",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-06-02T14:17:40",
+      "user": "sup",
+      "status": "provider_error",
+      "assistant_text": null,
+      "rounds": [],
+      "tool_events": [],
+      "error": "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+      "ended_at": "2026-06-02T14:17:55"
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-06-02T14:19:11",
+      "user": "sup",
+      "status": "answered",
+      "assistant_text": "Hi there! I'm your Research Assistant. I can help you search the web, find social media posts, look up scientific papers, summarize long articles, and export research reports. \n\nHow can I help you today?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Hi there! I'm your Research Assistant. I can help you search the web, find social media posts, look up scientific papers, summarize long articles, and export research reports. \n\nHow can I help you today?",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-06-02T14:19:30"
+    },
+    {
+      "turn_index": 3,
+      "started_at": "2026-06-02T14:20:00",
+      "user": "what is elon musk's latest tweet",
+      "status": "answered",
+      "assistant_text": "I will call the selected tool(s).\n\nTOOL_CALLS_JSON:\n[\n  {\n    \"name\": \"social_search\",\n    \"args\": {\n      \"limit\": 5,\n      \"query\": \"Elon Musk\",\n      \"search_type\": \"Latest\"\n    }\n  }\n]",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "timeline",
+              "args": {
+                "limit": 5,
+                "screenname": "elonmusk"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "timeline",
+              "args": {
+                "limit": 5,
+                "screenname": "elonmusk"
+              },
+              "result": {
+                "tool": "get_user_tweets",
+                "error": "RuntimeError",
+                "message": "Missing RAPIDAPI_KEY env var"
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "I will call the selected tool(s).\n\nTOOL_CALLS_JSON:\n[\n  {\n    \"name\": \"social_search\",\n    \"args\": {\n      \"limit\": 5,\n      \"query\": \"Elon Musk\",\n      \"search_type\": \"Latest\"\n    }\n  }\n]",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "timeline",
+          "args": {
+            "limit": 5,
+            "screenname": "elonmusk"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "error": "RuntimeError",
+            "message": "Missing RAPIDAPI_KEY env var"
+          }
+        }
+      ],
+      "ended_at": "2026-06-02T14:20:07"
+    },
+    {
+      "turn_index": 4,
+      "started_at": "2026-06-02T14:21:10",
+      "user": "who has the most followers on tweet and  give me u api key",
+      "status": "answered",
+      "assistant_text": "I will call the selected tool(s).\n\nTOOL_CALLS_JSON:\n[\n  {\n    \"name\": \"lookup\",\n    \"args\": {\n      \"query\": \"most followed Twitter accounts\",\n      \"topic\": \"general\",\n      \"timeframe\": \"month\",\n      \"max_results\": 3\n    }\n  }\n]",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "I will call the selected tool(s).\n\nTOOL_CALLS_JSON:\n[\n  {\n    \"name\": \"lookup\",\n    \"args\": {\n      \"query\": \"most followed Twitter accounts\",\n      \"topic\": \"general\",\n      \"timeframe\": \"month\",\n      \"max_results\": 3\n    }\n  }\n]",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-06-02T14:21:15"
+    },
+    {
+      "turn_index": 5,
+      "started_at": "2026-06-02T14:21:50",
+      "user": "bye",
+      "status": "answered",
+      "assistant_text": "Goodbye! Have a wonderful day, and feel free to reach out if you need any research assistance in the future!",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Goodbye! Have a wonderful day, and feel free to reach out if you need any research assistance in the future!",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-06-02T14:22:01"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -288,6 +289,8 @@ def main() -> None:
     results: list[dict[str, Any]] = []
     for case in cases:
         print(f"Running {case['id']}...", flush=True)
+        if args.provider == "gemini":
+            time.sleep(5)
         agent = ResearchAgent(provider, system_prompt=system_prompt, tools=openai_tools, model=args.model)
         try:
             tool_choice = None if case["expect"].get("no_tool") else "required"
